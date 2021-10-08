@@ -8,7 +8,6 @@
 
 **[Consensus]**
 
-- Create Vote module in diem-framework for onchain voting [\#9214](https://github.com/diem/diem/pull/9214)
 - \[2chain\] connect everything and add tests [\#9111](https://github.com/diem/diem/pull/9111)
 - \[2chain\] switch to use 2-chain in Genesis module [\#9132](https://github.com/diem/diem/pull/9132)
 - \[consensus\] Use PeerMetadataStorage for Consensus [\#9336](https://github.com/diem/diem/pull/9336)
@@ -26,6 +25,7 @@
 
 **[Diem Framework]**
 
+- Create Vote module in diem-framework for onchain voting [\#9214](https://github.com/diem/diem/pull/9214)
 - \[read-write-set\] Standalone type definition for read-write-set analysis [\#8589](https://github.com/diem/diem/pull/8589)
 - \[diem-framework\] Add force shift event to CRSNs, add gate [\#9204](https://github.com/diem/diem/pull/9204)
 - \[diem-framework\] Make core, experimental, and DPN Move packages [\#9246](https://github.com/diem/diem/pull/9246)
