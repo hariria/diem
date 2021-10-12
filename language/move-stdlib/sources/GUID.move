@@ -1,6 +1,8 @@
 /// A module for generating globally unique identifiers
 module Std::GUID {
+    use Std::BCS;
     use Std::Signer;
+    use Std::Vector;
 
     /// A generator for new GUIDs.
     struct Generator has key {
@@ -40,11 +42,6 @@ module Std::GUID {
         GUID { id: ID { creation_num, addr } }
     }
 
-    /// Publish a Generator resource under `account`
-    public fun publish_generator(account: &signer) {
-        move_to(account, Generator { counter: 0 })
-    }
-
     /// Get the non-privileged ID associated with a GUID
     public fun id(guid: &GUID): ID {
         *&guid.id
@@ -68,6 +65,21 @@ module Std::GUID {
     /// Return the creation number associated with the GUID::ID
     public fun id_creation_num(id: &ID): u64 {
         id.creation_num
+    }
+
+    /// Convert this GUID::ID to a vector of bytes by concatenating its
+    /// creation number and creator address
+    public fun id_to_bytes(id: &ID): vector<u8> {
+        let creation_num_bytes = BCS::to_bytes(&id.creation_num);
+        let creator_bytes = BCS::to_bytes(&id.addr);
+        Vector::append(&mut creation_num_bytes, creator_bytes);
+        creation_num_bytes
+    }
+
+    /// Convert this GUID to a vector of bytes by concatenating its
+    /// creation number and creator address
+    public fun to_bytes(guid: &GUID): vector<u8> {
+        id_to_bytes(&guid.id)
     }
 
     /// Return true if the GUID's ID is `id`

@@ -218,7 +218,7 @@ Return the GUIID associated with this EventHandle
 Log <code>msg</code> as the <code>count</code>th event associated with the event stream identified by <code>guid</code>
 
 
-<pre><code><b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop, store&gt;(guid: vector&lt;u8&gt;, count: u64, msg: T)
+<pre><code><b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop, store&gt;(guid_bytes: vector&lt;u8&gt;, count: u64, msg: T)
 </code></pre>
 
 
@@ -227,7 +227,7 @@ Log <code>msg</code> as the <code>count</code>th event associated with the event
 <summary>Implementation</summary>
 
 
-<pre><code><b>native</b> <b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop + store&gt;(guid: vector&lt;u8&gt;, count: u64, msg: T);
+<pre><code><b>native</b> <b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop + store&gt;(guid_bytes: vector&lt;u8&gt;, count: u64, msg: T);
 </code></pre>
 
 
