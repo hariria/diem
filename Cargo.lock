@@ -8898,18 +8898,31 @@ dependencies = [
 ]
 
 [[package]]
-name = "transaction-emitter"
-version = "0.0.0"
+name = "trove-hackathon-demo"
+version = "0.1.0"
 dependencies = [
+ "abigen",
  "anyhow",
- "diem-logger",
+ "bcs",
+ "diem-config",
+ "diem-crypto",
+ "diem-genesis-tool",
+ "diem-json-rpc-types",
+ "diem-node",
  "diem-sdk",
+ "diem-temppath",
+ "diem-types",
  "diem-workspace-hack",
- "futures",
- "itertools 0.10.1",
+ "diemdb",
+ "generate-key",
+ "log",
+ "move-core-types",
+ "move-prover",
  "rand 0.8.4",
- "rand_core 0.6.2",
+ "structopt 0.3.21",
  "tokio",
+ "transaction-builder-generator",
+ "walkdir",
 ]
 
 [[package]]
