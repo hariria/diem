@@ -2778,6 +2778,7 @@ dependencies = [
  "diem-types",
  "diem-workspace-hack",
  "fail",
+ "hex",
  "mirai-annotations",
  "move-binary-format",
  "move-bytecode-utils",
