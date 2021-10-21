@@ -61,9 +61,9 @@ module DiemFramework::MultiTokenTests {
         MultiTokenBalance::add_to_gallery<Game>(creator_addr, token1);
 
         // Assert creator has the right number of tokens and supply is 10.
-        assert!(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), EMINT_FAILED);
-        assert!(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 10, EMINT_FAILED);
-        assert!(MultiToken::supply<Game>(&token1_id) == 10, EMINT_FAILED);
+        assert(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), EMINT_FAILED);
+        assert(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 10, EMINT_FAILED);
+        assert(MultiToken::supply<Game>(&token1_id) == 10, EMINT_FAILED);
 
         let token2 = MultiToken::create<Game>(
             &creator,
@@ -73,8 +73,8 @@ module DiemFramework::MultiTokenTests {
             Option::none(),
         );
         MultiTokenBalance::add_to_gallery<Game>(creator_addr, token2);
-        assert!(MultiTokenBalance::has_token<Game>(creator_addr, &token2_id), EMINT_FAILED);
-        assert!(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token2_id) == 233, EMINT_FAILED);
+        assert(MultiTokenBalance::has_token<Game>(creator_addr, &token2_id), EMINT_FAILED);
+        assert(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token2_id) == 233, EMINT_FAILED);
 
         /*
         ===============================================================
@@ -131,11 +131,11 @@ module DiemFramework::MultiTokenTests {
             0, // token.id.creation_num
         );
 
-        assert!(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), ETRANSFER_FAILED);
-        assert!(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 4, ETRANSFER_FAILED);
-        assert!(MultiTokenBalance::has_token<Game>(user_addr, &token1_id), ETRANSFER_FAILED);
-        assert!(MultiTokenBalance::get_token_balance<Game>(user_addr, &token1_id) == 6, ETRANSFER_FAILED);
-        assert!(MultiToken::supply<Game>(&token1_id) == 10, ETRANSFER_FAILED); // supply should not change
+        assert(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), ETRANSFER_FAILED);
+        assert(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 4, ETRANSFER_FAILED);
+        assert(MultiTokenBalance::has_token<Game>(user_addr, &token1_id), ETRANSFER_FAILED);
+        assert(MultiTokenBalance::get_token_balance<Game>(user_addr, &token1_id) == 6, ETRANSFER_FAILED);
+        assert(MultiToken::supply<Game>(&token1_id) == 10, ETRANSFER_FAILED); // supply should not change
 
 
         /*
@@ -148,9 +148,9 @@ module DiemFramework::MultiTokenTests {
         MultiTokenBalance::transfer_multi_token_between_galleries<Game>(
             user, creator_addr, 6, creator_addr, 0,
         );
-        assert!(!MultiTokenBalance::has_token<Game>(user_addr, &token1_id), ETRANSFER_FAILED); // user doesn't have token1 anymore
-        assert!(MultiTokenBalance::get_token_balance<Game>(user_addr, &token1_id) == 0, ETRANSFER_FAILED);
-        assert!(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), ETRANSFER_FAILED);
-        assert!(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 10, ETRANSFER_FAILED);
+        assert(!MultiTokenBalance::has_token<Game>(user_addr, &token1_id), ETRANSFER_FAILED); // user doesn't have token1 anymore
+        assert(MultiTokenBalance::get_token_balance<Game>(user_addr, &token1_id) == 0, ETRANSFER_FAILED);
+        assert(MultiTokenBalance::has_token<Game>(creator_addr, &token1_id), ETRANSFER_FAILED);
+        assert(MultiTokenBalance::get_token_balance<Game>(creator_addr, &token1_id) == 10, ETRANSFER_FAILED);
     }
 }
