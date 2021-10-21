@@ -2204,9 +2204,6 @@ pub enum ScriptFunctionCall {
         sliding_nonce: u64,
     },
 
-    /// Initialize this module, to be called in genesis.
-    InitializeMultiToken {},
-
     /// Mint `amount` copies of BARS tokens to the artist's account.
     MintBars {
         artist_name: Bytes,
@@ -3029,7 +3026,7 @@ pub enum ScriptFunctionCall {
     /// Transfer `amount` of token with id `GUID::id(creator, creation_num)` from `owner`'s
     /// balance to `to`'s balance. This operation has to be done by either the owner or an
     /// approved operator of the owner.
-    TransferMultiTokenBetweenGalleries {
+    TransferTokenBetweenGalleries {
         token_type: TypeTag,
         to: AccountAddress,
         amount: u64,
@@ -3646,7 +3643,6 @@ impl ScriptFunctionCall {
             InitializeDiemConsensusConfig { sliding_nonce } => {
                 encode_initialize_diem_consensus_config_script_function(sliding_nonce)
             }
-            InitializeMultiToken {} => encode_initialize_multi_token_script_function(),
             MintBars {
                 artist_name,
                 content_uri,
@@ -3800,13 +3796,13 @@ impl ScriptFunctionCall {
                 mint_amount,
                 tier_index,
             ),
-            TransferMultiTokenBetweenGalleries {
+            TransferTokenBetweenGalleries {
                 token_type,
                 to,
                 amount,
                 creator,
                 creation_num,
-            } => encode_transfer_multi_token_between_galleries_script_function(
+            } => encode_transfer_token_between_galleries_script_function(
                 token_type,
                 to,
                 amount,
@@ -4866,19 +4862,6 @@ pub fn encode_initialize_diem_consensus_config_script_function(
         ident_str!("initialize_diem_consensus_config").to_owned(),
         vec![],
         vec![bcs::to_bytes(&sliding_nonce).unwrap()],
-    ))
-}
-
-/// Initialize this module, to be called in genesis.
-pub fn encode_initialize_multi_token_script_function() -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("MultiToken").to_owned(),
-        ),
-        ident_str!("initialize_multi_token").to_owned(),
-        vec![],
-        vec![],
     ))
 }
 
@@ -5992,7 +5975,7 @@ pub fn encode_tiered_mint_script_function(
 /// Transfer `amount` of token with id `GUID::id(creator, creation_num)` from `owner`'s
 /// balance to `to`'s balance. This operation has to be done by either the owner or an
 /// approved operator of the owner.
-pub fn encode_transfer_multi_token_between_galleries_script_function(
+pub fn encode_transfer_token_between_galleries_script_function(
     token_type: TypeTag,
     to: AccountAddress,
     amount: u64,
@@ -6002,9 +5985,9 @@ pub fn encode_transfer_multi_token_between_galleries_script_function(
     TransactionPayload::ScriptFunction(ScriptFunction::new(
         ModuleId::new(
             AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("MultiTokenBalance").to_owned(),
+            ident_str!("NFTGallery").to_owned(),
         ),
-        ident_str!("transfer_multi_token_between_galleries").to_owned(),
+        ident_str!("transfer_token_between_galleries").to_owned(),
         vec![token_type],
         vec![
             bcs::to_bytes(&to).unwrap(),
@@ -8225,16 +8208,6 @@ fn decode_initialize_diem_consensus_config_script_function(
     }
 }
 
-fn decode_initialize_multi_token_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(_script) = payload {
-        Some(ScriptFunctionCall::InitializeMultiToken {})
-    } else {
-        None
-    }
-}
-
 fn decode_mint_bars_script_function(payload: &TransactionPayload) -> Option<ScriptFunctionCall> {
     if let TransactionPayload::ScriptFunction(script) = payload {
         Some(ScriptFunctionCall::MintBars {
@@ -8546,11 +8519,11 @@ fn decode_tiered_mint_script_function(payload: &TransactionPayload) -> Option<Sc
     }
 }
 
-fn decode_transfer_multi_token_between_galleries_script_function(
+fn decode_transfer_token_between_galleries_script_function(
     payload: &TransactionPayload,
 ) -> Option<ScriptFunctionCall> {
     if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::TransferMultiTokenBetweenGalleries {
+        Some(ScriptFunctionCall::TransferTokenBetweenGalleries {
             token_type: script.ty_args().get(0)?.clone(),
             to: bcs::from_bytes(script.args().get(0)?).ok()?,
             amount: bcs::from_bytes(script.args().get(1)?).ok()?,
@@ -9124,10 +9097,6 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_initialize_diem_consensus_config_script_function),
         );
         map.insert(
-            "MultiTokeninitialize_multi_token".to_string(),
-            Box::new(decode_initialize_multi_token_script_function),
-        );
-        map.insert(
             "BARSTokenmint_bars".to_string(),
             Box::new(decode_mint_bars_script_function),
         );
@@ -9221,8 +9190,8 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_tiered_mint_script_function),
         );
         map.insert(
-            "MultiTokenBalancetransfer_multi_token_between_galleries".to_string(),
-            Box::new(decode_transfer_multi_token_between_galleries_script_function),
+            "NFTGallerytransfer_token_between_galleries".to_string(),
+            Box::new(decode_transfer_token_between_galleries_script_function),
         );
         map.insert(
             "TreasuryComplianceScriptsunfreeze_account".to_string(),
