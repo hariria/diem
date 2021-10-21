@@ -154,8 +154,8 @@ module DiemFramework::NFT {
         } )
     }
 
-    /// Initialize this module, to be called in genesis.
-    public fun initialize(account: signer) {
+    /// Initialize this module
+    public(script) fun nft_initialize(account: signer) {
         assert(Signer::address_of(&account) == ADMIN, ENOT_ADMIN);
         move_to(&account, Admin {
             mint_events: Event::new_event_handle<MintEvent>(&account),
