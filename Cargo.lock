@@ -8899,6 +8899,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "transaction-emitter"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "diem-logger",
+ "diem-sdk",
+ "diem-workspace-hack",
+ "futures",
+ "itertools 0.10.1",
+ "rand 0.8.4",
+ "rand_core 0.6.2",
+ "tokio",
+]
+
+[[package]]
 name = "trove-hackathon-demo"
 version = "0.1.0"
 dependencies = [

@@ -22,10 +22,10 @@ diem-types = { path = "../types" }
 diem-workspace-hack = { path = "../common/workspace-hack" }
 generate-key = { path = "../config/generate-key" }
 move-prover = { path = "../language/move-prover" }
-transaction-builder-generator = { path = "../language/transaction-builder/generator" }
+transaction-builder-generator = { path = "../diem-move/transaction-builder-generator" }
 move-core-types = { path = "../language/move-core/types" }
 tokio = { version = "1", features = ["full"] }
-diem-framework-releases = { path = "../language/diem-framework/DPN/releases" }
+diem-framework-releases = { path = "../diem-move/diem-framework/DPN/releases" }
 diem-transaction-builder = { path = "../sdk/transaction-builder"}
 anyhow = "1.0.38"
 bcs = "0.1.2"
