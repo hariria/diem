@@ -2,6 +2,7 @@
 compiled_package_info:
   package_name: DiemExperimental
   address_alias_instantiation:
+    BARS: 34cd440b72d03907100007d7bc0080a1
     CurrencyInfo: 0000000000000000000000000a550c18
     DiemFramework: "00000000000000000000000000000001"
     DiemRoot: 0000000000000000000000000a550c18
@@ -118,6 +119,9 @@ compiled_package_info:
       name: Option
     : Std
     ? address: "00000000000000000000000000000001"
+      name: ParallelExecutionConfig
+    : DiemFramework
+    ? address: "00000000000000000000000000000001"
       name: PaymentScripts
     : DiemFramework
     ? address: "00000000000000000000000000000001"
@@ -174,7 +178,7 @@ compiled_package_info:
     ? address: "00000000000000000000000000000001"
       name: XUS
     : DiemFramework
-  source_digest: B6B1052B5BA8D8D3C818362BE47FC06992FF7FBDA6B86D00D01244E5EB35389F
+  source_digest: B3EB2AD6C175EBFBFB7835E29B8E38DB2BB23648F98ACB724CE13F0CDEBF0A25
   build_flags:
     dev_mode: false
     test_mode: false

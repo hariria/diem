@@ -1470,9 +1470,7 @@ pub enum ScriptFunctionCall {
     /// * `AccountCreationScripts::create_child_vasp_account`
     /// * `AccountCreationScripts::create_parent_vasp_account`
     /// * `PaymentScripts::peer_to_peer_with_metadata`
-    AddCurrencyToAccount {
-        currency: TypeTag,
-    },
+    AddCurrencyToAccount { currency: TypeTag },
 
     /// # Summary
     /// Stores the sending accounts ability to rotate its authentication key with a designated recovery
@@ -1514,9 +1512,7 @@ pub enum ScriptFunctionCall {
     /// # Related Scripts
     /// * `AccountAdministrationScripts::create_recovery_address`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_recovery_address`
-    AddRecoveryRotationCapability {
-        recovery_address: AccountAddress,
-    },
+    AddRecoveryRotationCapability { recovery_address: AccountAddress },
 
     /// # Summary
     /// Adds a validator account to the validator set, and triggers a
@@ -1634,9 +1630,7 @@ pub enum ScriptFunctionCall {
     /// # Related Scripts
     /// * `TreasuryComplianceScripts::burn_with_amount`
     /// * `TreasuryComplianceScripts::cancel_burn_with_amount`
-    BurnTxnFees {
-        coin_type: TypeTag,
-    },
+    BurnTxnFees { coin_type: TypeTag },
 
     /// # Summary
     /// Burns the coins held in a preburn resource in the preburn queue at the
@@ -1750,12 +1744,6 @@ pub enum ScriptFunctionCall {
         token: TypeTag,
         preburn_address: AccountAddress,
         amount: u64,
-    },
-
-    CreateAccount {
-        coin_type: TypeTag,
-        new_account_address: AccountAddress,
-        auth_key_prefix: Bytes,
     },
 
     /// # Summary
@@ -2126,9 +2114,7 @@ pub enum ScriptFunctionCall {
     /// | Error Category          | Error Reason     | Description                                               |
     /// | ----------------        | --------------   | -------------                                             |
     /// | `Errors::INVALID_STATE` | `CRSN::ENO_CRSN` | A `CRSN::CRSN` resource is not published under `account`. |
-    ForceExpire {
-        shift_amount: u64,
-    },
+    ForceExpire { shift_amount: u64 },
 
     /// # Summary
     /// Freezes the account at `address`. The sending account of this transaction
@@ -2200,20 +2186,7 @@ pub enum ScriptFunctionCall {
     /// | `Errors::INVALID_ARGUMENT` | `SlidingNonce::ENONCE_TOO_NEW`                | The `sliding_nonce` is too far in the future.                                              |
     /// | `Errors::INVALID_ARGUMENT` | `SlidingNonce::ENONCE_ALREADY_RECORDED`       | The `sliding_nonce` has been previously recorded.                                          |
     /// | `Errors::REQUIRES_ADDRESS` | `CoreAddresses::EDIEM_ROOT`                   | `account` is not the Diem Root account.                                                    |
-    InitializeDiemConsensusConfig {
-        sliding_nonce: u64,
-    },
-
-    /// BARS account mints `amount` copies of BARS tokens to the artist's account.
-    MintBars {
-        artist: AccountAddress,
-        artist_name: Bytes,
-        content_uri: Bytes,
-        amount: u64,
-    },
-
-    /// Initialize this module
-    NftInitialize {},
+    InitializeDiemConsensusConfig { sliding_nonce: u64 },
 
     /// # Summary
     /// Publishes a CRSN resource under `account` and opts the account in to
@@ -2238,9 +2211,7 @@ pub enum ScriptFunctionCall {
     /// | ----------------           | --------------          | -------------                                                  |
     /// | `Errors::INVALID_STATE`    | `CRSN::EHAS_CRSN`       | A `CRSN::CRSN` resource was already published under `account`. |
     /// | `Errors::INVALID_ARGUMENT` | `CRSN::EZERO_SIZE_CRSN` | The `crsn_size` was zero.                                      |
-    OptInToCrsn {
-        crsn_size: u64,
-    },
+    OptInToCrsn { crsn_size: u64 },
 
     /// # Summary
     /// Transfers a given number of coins in a specified currency from one account to another by multi-agent transaction.
@@ -2356,10 +2327,6 @@ pub enum ScriptFunctionCall {
         metadata_signature: Bytes,
     },
 
-    PreApproveModulePublish {
-        module_sha3: Bytes,
-    },
-
     /// # Summary
     /// Moves a specified number of coins in a given currency from the account's
     /// balance to its preburn area after which the coins may be burned. This
@@ -2403,14 +2370,7 @@ pub enum ScriptFunctionCall {
     /// * `TreasuryComplianceScripts::cancel_burn_with_amount`
     /// * `TreasuryComplianceScripts::burn_with_amount`
     /// * `TreasuryComplianceScripts::burn_txn_fees`
-    Preburn {
-        token: TypeTag,
-        amount: u64,
-    },
-
-    ProposePreApproveModulePublish {
-        module_sha3: Bytes,
-    },
+    Preburn { token: TypeTag, amount: u64 },
 
     /// # Summary
     /// Rotates the authentication key of the sending account to the newly-specified ed25519 public key and
@@ -2439,15 +2399,7 @@ pub enum ScriptFunctionCall {
     ///
     /// # Related Scripts
     /// * `AccountAdministrationScripts::rotate_shared_ed25519_public_key`
-    PublishSharedEd25519PublicKey {
-        public_key: Bytes,
-    },
-
-    /// Call this function to set up relevant resources in order to
-    /// mint and receive tokens.
-    /// Note that this also gives BARS account a capability to mint BARS NFTs on behalf of the user.
-    /// (the NFTs of other types cannot be created by BARS account).
-    RegisterBarsUser {},
+    PublishSharedEd25519PublicKey { public_key: Bytes },
 
     /// # Summary
     /// Updates a validator's configuration. This does not reconfigure the system and will not update
@@ -2594,9 +2546,7 @@ pub enum ScriptFunctionCall {
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_nonce`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_nonce_admin`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_recovery_address`
-    RotateAuthenticationKey {
-        new_key: Bytes,
-    },
+    RotateAuthenticationKey { new_key: Bytes },
 
     /// # Summary
     /// Rotates the sender's authentication key to the supplied new authentication key. May be sent by
@@ -2630,10 +2580,7 @@ pub enum ScriptFunctionCall {
     /// * `AccountAdministrationScripts::rotate_authentication_key`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_nonce_admin`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_recovery_address`
-    RotateAuthenticationKeyWithNonce {
-        sliding_nonce: u64,
-        new_key: Bytes,
-    },
+    RotateAuthenticationKeyWithNonce { sliding_nonce: u64, new_key: Bytes },
 
     /// # Summary
     /// Rotates the specified account's authentication key to the supplied new authentication key. May
@@ -2667,10 +2614,7 @@ pub enum ScriptFunctionCall {
     /// * `AccountAdministrationScripts::rotate_authentication_key`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_nonce`
     /// * `AccountAdministrationScripts::rotate_authentication_key_with_recovery_address`
-    RotateAuthenticationKeyWithNonceAdmin {
-        sliding_nonce: u64,
-        new_key: Bytes,
-    },
+    RotateAuthenticationKeyWithNonceAdmin { sliding_nonce: u64, new_key: Bytes },
 
     /// # Summary
     /// Rotates the authentication key of a specified account that is part of a recovery address to a
@@ -2747,10 +2691,7 @@ pub enum ScriptFunctionCall {
     /// * `AccountCreationScripts::create_parent_vasp_account`
     /// * `AccountCreationScripts::create_designated_dealer`
     /// * `AccountAdministrationScripts::rotate_dual_attestation_info`
-    RotateDualAttestationInfo {
-        new_url: Bytes,
-        new_key: Bytes,
-    },
+    RotateDualAttestationInfo { new_url: Bytes, new_key: Bytes },
 
     /// # Summary
     /// Rotates the authentication key in a `SharedEd25519PublicKey`. This transaction can be sent by
@@ -2778,9 +2719,7 @@ pub enum ScriptFunctionCall {
     ///
     /// # Related Scripts
     /// * `AccountAdministrationScripts::publish_shared_ed25519_public_key`
-    RotateSharedEd25519PublicKey {
-        public_key: Bytes,
-    },
+    RotateSharedEd25519PublicKey { public_key: Bytes },
 
     /// # Summary
     /// Updates the gas constants stored on chain and used by the VM for gas
@@ -2829,10 +2768,6 @@ pub enum ScriptFunctionCall {
         max_transaction_size_in_bytes: u64,
         gas_unit_scaling_factor: u64,
         default_account_size: u64,
-    },
-
-    SetModulePublishPreApproval {
-        enable: bool,
     },
 
     /// # Summary
@@ -3033,17 +2968,6 @@ pub enum ScriptFunctionCall {
         tier_index: u64,
     },
 
-    /// Transfer `amount` of token with id `GUID::id(creator, creation_num)` from `owner`'s
-    /// balance to `to`'s balance. This operation has to be done by either the owner or an
-    /// approved operator of the owner.
-    TransferTokenBetweenGalleries {
-        token_type: TypeTag,
-        to: AccountAddress,
-        amount: u64,
-        creator: AccountAddress,
-        creation_num: u64,
-    },
-
     /// # Summary
     /// Unfreezes the account at `address`. The sending account of this transaction must be the
     /// Treasury Compliance account. After the successful execution of this transaction transactions
@@ -3105,10 +3029,7 @@ pub enum ScriptFunctionCall {
     /// | `Errors::INVALID_ARGUMENT` | `SlidingNonce::ENONCE_TOO_NEW`                | The `sliding_nonce` is too far in the future.                                              |
     /// | `Errors::INVALID_ARGUMENT` | `SlidingNonce::ENONCE_ALREADY_RECORDED`       | The `sliding_nonce` has been previously recorded.                                          |
     /// | `Errors::REQUIRES_ADDRESS` | `CoreAddresses::EDIEM_ROOT`                   | `account` is not the Diem Root account.                                                    |
-    UpdateDiemConsensusConfig {
-        sliding_nonce: u64,
-        config: Bytes,
-    },
+    UpdateDiemConsensusConfig { sliding_nonce: u64, config: Bytes },
 
     /// # Summary
     /// Updates the Diem major version that is stored on-chain and is used by the VM.  This
@@ -3136,10 +3057,7 @@ pub enum ScriptFunctionCall {
     /// | `Errors::INVALID_ARGUMENT` | `SlidingNonce::ENONCE_ALREADY_RECORDED`       | The `sliding_nonce` has been previously recorded.                                          |
     /// | `Errors::REQUIRES_ADDRESS` | `CoreAddresses::EDIEM_ROOT`                   | `account` is not the Diem Root account.                                                    |
     /// | `Errors::INVALID_ARGUMENT` | `DiemVersion::EINVALID_MAJOR_VERSION_NUMBER`  | `major` is less-than or equal to the current major version stored on-chain.                |
-    UpdateDiemVersion {
-        sliding_nonce: u64,
-        major: u64,
-    },
+    UpdateDiemVersion { sliding_nonce: u64, major: u64 },
 
     /// # Summary
     /// Update the dual attestation limit on-chain. Defined in terms of micro-XDX.  The transaction can
@@ -3246,11 +3164,6 @@ pub enum ScriptFunctionCall {
     UpdateMintingAbility {
         currency: TypeTag,
         allow_minting: bool,
-    },
-
-    VotePreApproveModulePublish {
-        module_sha3: Bytes,
-        ballot_counter: u64,
     },
 }
 
@@ -3573,15 +3486,6 @@ impl ScriptFunctionCall {
                 preburn_address,
                 amount,
             } => encode_cancel_burn_with_amount_script_function(token, preburn_address, amount),
-            CreateAccount {
-                coin_type,
-                new_account_address,
-                auth_key_prefix,
-            } => encode_create_account_script_function(
-                coin_type,
-                new_account_address,
-                auth_key_prefix,
-            ),
             CreateChildVaspAccount {
                 coin_type,
                 child_address,
@@ -3654,17 +3558,9 @@ impl ScriptFunctionCall {
                 sliding_nonce,
                 to_freeze_account,
             } => encode_freeze_account_script_function(sliding_nonce, to_freeze_account),
-            GcBallots { proposal, addr } => encode_gc_ballots_script_function(proposal, addr),
             InitializeDiemConsensusConfig { sliding_nonce } => {
                 encode_initialize_diem_consensus_config_script_function(sliding_nonce)
             }
-            MintBars {
-                artist,
-                artist_name,
-                content_uri,
-                amount,
-            } => encode_mint_bars_script_function(artist, artist_name, content_uri, amount),
-            NftInitialize {} => encode_nft_initialize_script_function(),
             OptInToCrsn { crsn_size } => encode_opt_in_to_crsn_script_function(crsn_size),
             PeerToPeerBySigners {
                 currency,
@@ -3684,17 +3580,10 @@ impl ScriptFunctionCall {
                 metadata,
                 metadata_signature,
             ),
-            PreApproveModulePublish { module_sha3 } => {
-                encode_pre_approve_module_publish_script_function(module_sha3)
-            }
             Preburn { token, amount } => encode_preburn_script_function(token, amount),
-            ProposePreApproveModulePublish { module_sha3 } => {
-                encode_propose_pre_approve_module_publish_script_function(module_sha3)
-            }
             PublishSharedEd25519PublicKey { public_key } => {
                 encode_publish_shared_ed25519_public_key_script_function(public_key)
             }
-            RegisterBarsUser {} => encode_register_bars_user_script_function(),
             RegisterValidatorConfig {
                 validator_account,
                 consensus_pubkey,
@@ -3776,9 +3665,6 @@ impl ScriptFunctionCall {
                 gas_unit_scaling_factor,
                 default_account_size,
             ),
-            SetModulePublishPreApproval { enable } => {
-                encode_set_module_publish_pre_approval_script_function(enable)
-            }
             SetValidatorConfigAndReconfigure {
                 validator_account,
                 consensus_pubkey,
@@ -3816,19 +3702,6 @@ impl ScriptFunctionCall {
                 mint_amount,
                 tier_index,
             ),
-            TransferTokenBetweenGalleries {
-                token_type,
-                to,
-                amount,
-                creator,
-                creation_num,
-            } => encode_transfer_token_between_galleries_script_function(
-                token_type,
-                to,
-                amount,
-                creator,
-                creation_num,
-            ),
             UnfreezeAccount {
                 sliding_nonce,
                 to_unfreeze_account,
@@ -3863,12 +3736,6 @@ impl ScriptFunctionCall {
                 currency,
                 allow_minting,
             } => encode_update_minting_ability_script_function(currency, allow_minting),
-            VotePreApproveModulePublish {
-                module_sha3,
-                ballot_counter,
-            } => {
-                encode_vote_pre_approve_module_publish_script_function(module_sha3, ballot_counter)
-            }
         }
     }
 
@@ -4276,25 +4143,6 @@ pub fn encode_cancel_burn_with_amount_script_function(
         vec![
             bcs::to_bytes(&preburn_address).unwrap(),
             bcs::to_bytes(&amount).unwrap(),
-        ],
-    ))
-}
-
-pub fn encode_create_account_script_function(
-    coin_type: TypeTag,
-    new_account_address: AccountAddress,
-    auth_key_prefix: Vec<u8>,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("AccountCreationScripts").to_owned(),
-        ),
-        ident_str!("create_account").to_owned(),
-        vec![coin_type],
-        vec![
-            bcs::to_bytes(&new_account_address).unwrap(),
-            bcs::to_bytes(&auth_key_prefix).unwrap(),
         ],
     ))
 }
@@ -4837,24 +4685,6 @@ pub fn encode_freeze_account_script_function(
     ))
 }
 
-/// gc_ballots deletes all the expired ballots of the type `Proposal`
-/// under the provided address `addr`. The signer can be anybody
-/// and does not need to have the same address as `addr`
-pub fn encode_gc_ballots_script_function(
-    proposal: TypeTag,
-    addr: AccountAddress,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("Vote").to_owned(),
-        ),
-        ident_str!("gc_ballots").to_owned(),
-        vec![proposal],
-        vec![bcs::to_bytes(&addr).unwrap()],
-    ))
-}
-
 /// # Summary
 /// Initializes the Diem consensus config that is stored on-chain.  This
 /// transaction can only be sent from the Diem Root account.
@@ -4888,42 +4718,6 @@ pub fn encode_initialize_diem_consensus_config_script_function(
         ident_str!("initialize_diem_consensus_config").to_owned(),
         vec![],
         vec![bcs::to_bytes(&sliding_nonce).unwrap()],
-    ))
-}
-
-/// BARS account mints `amount` copies of BARS tokens to the artist's account.
-pub fn encode_mint_bars_script_function(
-    artist: AccountAddress,
-    artist_name: Vec<u8>,
-    content_uri: Vec<u8>,
-    amount: u64,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("BARSToken").to_owned(),
-        ),
-        ident_str!("mint_bars").to_owned(),
-        vec![],
-        vec![
-            bcs::to_bytes(&artist).unwrap(),
-            bcs::to_bytes(&artist_name).unwrap(),
-            bcs::to_bytes(&content_uri).unwrap(),
-            bcs::to_bytes(&amount).unwrap(),
-        ],
-    ))
-}
-
-/// Initialize this module
-pub fn encode_nft_initialize_script_function() -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("NFT").to_owned(),
-        ),
-        ident_str!("nft_initialize").to_owned(),
-        vec![],
-        vec![],
     ))
 }
 
@@ -5104,20 +4898,6 @@ pub fn encode_peer_to_peer_with_metadata_script_function(
     ))
 }
 
-pub fn encode_pre_approve_module_publish_script_function(
-    module_sha3: Vec<u8>,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("DiemTransactionPublishingOption").to_owned(),
-        ),
-        ident_str!("pre_approve_module_publish").to_owned(),
-        vec![],
-        vec![bcs::to_bytes(&module_sha3).unwrap()],
-    ))
-}
-
 /// # Summary
 /// Moves a specified number of coins in a given currency from the account's
 /// balance to its preburn area after which the coins may be burned. This
@@ -5173,20 +4953,6 @@ pub fn encode_preburn_script_function(token: TypeTag, amount: u64) -> Transactio
     ))
 }
 
-pub fn encode_propose_pre_approve_module_publish_script_function(
-    module_sha3: Vec<u8>,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("DiemTransactionPublishingOption").to_owned(),
-        ),
-        ident_str!("propose_pre_approve_module_publish").to_owned(),
-        vec![],
-        vec![bcs::to_bytes(&module_sha3).unwrap()],
-    ))
-}
-
 /// # Summary
 /// Rotates the authentication key of the sending account to the newly-specified ed25519 public key and
 /// publishes a new shared authentication key derived from that public key under the sender's account.
@@ -5225,22 +4991,6 @@ pub fn encode_publish_shared_ed25519_public_key_script_function(
         ident_str!("publish_shared_ed25519_public_key").to_owned(),
         vec![],
         vec![bcs::to_bytes(&public_key).unwrap()],
-    ))
-}
-
-/// Call this function to set up relevant resources in order to
-/// mint and receive tokens.
-/// Note that this also gives BARS account a capability to mint BARS NFTs on behalf of the user.
-/// (the NFTs of other types cannot be created by BARS account).
-pub fn encode_register_bars_user_script_function() -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("BARSToken").to_owned(),
-        ),
-        ident_str!("register_bars_user").to_owned(),
-        vec![],
-        vec![],
     ))
 }
 
@@ -5762,18 +5512,6 @@ pub fn encode_set_gas_constants_script_function(
     ))
 }
 
-pub fn encode_set_module_publish_pre_approval_script_function(enable: bool) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("DiemTransactionPublishingOption").to_owned(),
-        ),
-        ident_str!("set_module_publish_pre_approval").to_owned(),
-        vec![],
-        vec![bcs::to_bytes(&enable).unwrap()],
-    ))
-}
-
 /// # Summary
 /// Updates a validator's configuration, and triggers a reconfiguration of the system to update the
 /// validator set with this new validator configuration.  Can only be successfully sent by a
@@ -6025,32 +5763,6 @@ pub fn encode_tiered_mint_script_function(
             bcs::to_bytes(&designated_dealer_address).unwrap(),
             bcs::to_bytes(&mint_amount).unwrap(),
             bcs::to_bytes(&tier_index).unwrap(),
-        ],
-    ))
-}
-
-/// Transfer `amount` of token with id `GUID::id(creator, creation_num)` from `owner`'s
-/// balance to `to`'s balance. This operation has to be done by either the owner or an
-/// approved operator of the owner.
-pub fn encode_transfer_token_between_galleries_script_function(
-    token_type: TypeTag,
-    to: AccountAddress,
-    amount: u64,
-    creator: AccountAddress,
-    creation_num: u64,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("NFTGallery").to_owned(),
-        ),
-        ident_str!("transfer_token_between_galleries").to_owned(),
-        vec![token_type],
-        vec![
-            bcs::to_bytes(&to).unwrap(),
-            bcs::to_bytes(&amount).unwrap(),
-            bcs::to_bytes(&creator).unwrap(),
-            bcs::to_bytes(&creation_num).unwrap(),
         ],
     ))
 }
@@ -6332,24 +6044,6 @@ pub fn encode_update_minting_ability_script_function(
         ident_str!("update_minting_ability").to_owned(),
         vec![currency],
         vec![bcs::to_bytes(&allow_minting).unwrap()],
-    ))
-}
-
-pub fn encode_vote_pre_approve_module_publish_script_function(
-    module_sha3: Vec<u8>,
-    ballot_counter: u64,
-) -> TransactionPayload {
-    TransactionPayload::ScriptFunction(ScriptFunction::new(
-        ModuleId::new(
-            AccountAddress::new([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-            ident_str!("DiemTransactionPublishingOption").to_owned(),
-        ),
-        ident_str!("vote_pre_approve_module_publish").to_owned(),
-        vec![],
-        vec![
-            bcs::to_bytes(&module_sha3).unwrap(),
-            bcs::to_bytes(&ballot_counter).unwrap(),
-        ],
     ))
 }
 
@@ -8123,20 +7817,6 @@ fn decode_cancel_burn_with_amount_script_function(
     }
 }
 
-fn decode_create_account_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::CreateAccount {
-            coin_type: script.ty_args().get(0)?.clone(),
-            new_account_address: bcs::from_bytes(script.args().get(0)?).ok()?,
-            auth_key_prefix: bcs::from_bytes(script.args().get(1)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
 fn decode_create_child_vasp_account_script_function(
     payload: &TransactionPayload,
 ) -> Option<ScriptFunctionCall> {
@@ -8260,17 +7940,6 @@ fn decode_freeze_account_script_function(
     }
 }
 
-fn decode_gc_ballots_script_function(payload: &TransactionPayload) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::GcBallots {
-            proposal: script.ty_args().get(0)?.clone(),
-            addr: bcs::from_bytes(script.args().get(0)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
 fn decode_initialize_diem_consensus_config_script_function(
     payload: &TransactionPayload,
 ) -> Option<ScriptFunctionCall> {
@@ -8278,29 +7947,6 @@ fn decode_initialize_diem_consensus_config_script_function(
         Some(ScriptFunctionCall::InitializeDiemConsensusConfig {
             sliding_nonce: bcs::from_bytes(script.args().get(0)?).ok()?,
         })
-    } else {
-        None
-    }
-}
-
-fn decode_mint_bars_script_function(payload: &TransactionPayload) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::MintBars {
-            artist: bcs::from_bytes(script.args().get(0)?).ok()?,
-            artist_name: bcs::from_bytes(script.args().get(1)?).ok()?,
-            content_uri: bcs::from_bytes(script.args().get(2)?).ok()?,
-            amount: bcs::from_bytes(script.args().get(3)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
-fn decode_nft_initialize_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(_script) = payload {
-        Some(ScriptFunctionCall::NftInitialize {})
     } else {
         None
     }
@@ -8348,35 +7994,11 @@ fn decode_peer_to_peer_with_metadata_script_function(
     }
 }
 
-fn decode_pre_approve_module_publish_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::PreApproveModulePublish {
-            module_sha3: bcs::from_bytes(script.args().get(0)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
 fn decode_preburn_script_function(payload: &TransactionPayload) -> Option<ScriptFunctionCall> {
     if let TransactionPayload::ScriptFunction(script) = payload {
         Some(ScriptFunctionCall::Preburn {
             token: script.ty_args().get(0)?.clone(),
             amount: bcs::from_bytes(script.args().get(0)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
-fn decode_propose_pre_approve_module_publish_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::ProposePreApproveModulePublish {
-            module_sha3: bcs::from_bytes(script.args().get(0)?).ok()?,
         })
     } else {
         None
@@ -8390,16 +8012,6 @@ fn decode_publish_shared_ed25519_public_key_script_function(
         Some(ScriptFunctionCall::PublishSharedEd25519PublicKey {
             public_key: bcs::from_bytes(script.args().get(0)?).ok()?,
         })
-    } else {
-        None
-    }
-}
-
-fn decode_register_bars_user_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(_script) = payload {
-        Some(ScriptFunctionCall::RegisterBarsUser {})
     } else {
         None
     }
@@ -8549,18 +8161,6 @@ fn decode_set_gas_constants_script_function(
     }
 }
 
-fn decode_set_module_publish_pre_approval_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::SetModulePublishPreApproval {
-            enable: bcs::from_bytes(script.args().get(0)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
 fn decode_set_validator_config_and_reconfigure_script_function(
     payload: &TransactionPayload,
 ) -> Option<ScriptFunctionCall> {
@@ -8611,22 +8211,6 @@ fn decode_tiered_mint_script_function(payload: &TransactionPayload) -> Option<Sc
             designated_dealer_address: bcs::from_bytes(script.args().get(1)?).ok()?,
             mint_amount: bcs::from_bytes(script.args().get(2)?).ok()?,
             tier_index: bcs::from_bytes(script.args().get(3)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
-fn decode_transfer_token_between_galleries_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::TransferTokenBetweenGalleries {
-            token_type: script.ty_args().get(0)?.clone(),
-            to: bcs::from_bytes(script.args().get(0)?).ok()?,
-            amount: bcs::from_bytes(script.args().get(1)?).ok()?,
-            creator: bcs::from_bytes(script.args().get(2)?).ok()?,
-            creation_num: bcs::from_bytes(script.args().get(3)?).ok()?,
         })
     } else {
         None
@@ -8707,19 +8291,6 @@ fn decode_update_minting_ability_script_function(
         Some(ScriptFunctionCall::UpdateMintingAbility {
             currency: script.ty_args().get(0)?.clone(),
             allow_minting: bcs::from_bytes(script.args().get(0)?).ok()?,
-        })
-    } else {
-        None
-    }
-}
-
-fn decode_vote_pre_approve_module_publish_script_function(
-    payload: &TransactionPayload,
-) -> Option<ScriptFunctionCall> {
-    if let TransactionPayload::ScriptFunction(script) = payload {
-        Some(ScriptFunctionCall::VotePreApproveModulePublish {
-            module_sha3: bcs::from_bytes(script.args().get(0)?).ok()?,
-            ballot_counter: bcs::from_bytes(script.args().get(1)?).ok()?,
         })
     } else {
         None
@@ -9160,10 +8731,6 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_cancel_burn_with_amount_script_function),
         );
         map.insert(
-            "AccountCreationScriptscreate_account".to_string(),
-            Box::new(decode_create_account_script_function),
-        );
-        map.insert(
             "AccountCreationScriptscreate_child_vasp_account".to_string(),
             Box::new(decode_create_child_vasp_account_script_function),
         );
@@ -9200,20 +8767,8 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_freeze_account_script_function),
         );
         map.insert(
-            "Votegc_ballots".to_string(),
-            Box::new(decode_gc_ballots_script_function),
-        );
-        map.insert(
             "SystemAdministrationScriptsinitialize_diem_consensus_config".to_string(),
             Box::new(decode_initialize_diem_consensus_config_script_function),
-        );
-        map.insert(
-            "BARSTokenmint_bars".to_string(),
-            Box::new(decode_mint_bars_script_function),
-        );
-        map.insert(
-            "NFTnft_initialize".to_string(),
-            Box::new(decode_nft_initialize_script_function),
         );
         map.insert(
             "AccountAdministrationScriptsopt_in_to_crsn".to_string(),
@@ -9228,24 +8783,12 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_peer_to_peer_with_metadata_script_function),
         );
         map.insert(
-            "DiemTransactionPublishingOptionpre_approve_module_publish".to_string(),
-            Box::new(decode_pre_approve_module_publish_script_function),
-        );
-        map.insert(
             "TreasuryComplianceScriptspreburn".to_string(),
             Box::new(decode_preburn_script_function),
         );
         map.insert(
-            "DiemTransactionPublishingOptionpropose_pre_approve_module_publish".to_string(),
-            Box::new(decode_propose_pre_approve_module_publish_script_function),
-        );
-        map.insert(
             "AccountAdministrationScriptspublish_shared_ed25519_public_key".to_string(),
             Box::new(decode_publish_shared_ed25519_public_key_script_function),
-        );
-        map.insert(
-            "BARSTokenregister_bars_user".to_string(),
-            Box::new(decode_register_bars_user_script_function),
         );
         map.insert(
             "ValidatorAdministrationScriptsregister_validator_config".to_string(),
@@ -9289,10 +8832,6 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
             Box::new(decode_set_gas_constants_script_function),
         );
         map.insert(
-            "DiemTransactionPublishingOptionset_module_publish_pre_approval".to_string(),
-            Box::new(decode_set_module_publish_pre_approval_script_function),
-        );
-        map.insert(
             "ValidatorAdministrationScriptsset_validator_config_and_reconfigure".to_string(),
             Box::new(decode_set_validator_config_and_reconfigure_script_function),
         );
@@ -9307,10 +8846,6 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
         map.insert(
             "TreasuryComplianceScriptstiered_mint".to_string(),
             Box::new(decode_tiered_mint_script_function),
-        );
-        map.insert(
-            "NFTGallerytransfer_token_between_galleries".to_string(),
-            Box::new(decode_transfer_token_between_galleries_script_function),
         );
         map.insert(
             "TreasuryComplianceScriptsunfreeze_account".to_string(),
@@ -9335,10 +8870,6 @@ static SCRIPT_FUNCTION_DECODER_MAP: once_cell::sync::Lazy<ScriptFunctionDecoderM
         map.insert(
             "TreasuryComplianceScriptsupdate_minting_ability".to_string(),
             Box::new(decode_update_minting_ability_script_function),
-        );
-        map.insert(
-            "DiemTransactionPublishingOptionvote_pre_approve_module_publish".to_string(),
-            Box::new(decode_vote_pre_approve_module_publish_script_function),
         );
         map
     });

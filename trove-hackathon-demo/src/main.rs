@@ -13,7 +13,7 @@ use diem_sdk::{
     transaction_builder::{Currency, TransactionFactory},
     types::LocalAccount,
 };
-use diem_transaction_builder::stdlib;
+use diem_transaction_builder::experimental_stdlib as stdlib;
 use diem_types::transaction::Module;
 use diem_types::{
     account_address::AccountAddress,

@@ -3,8 +3,6 @@ module DiemFramework::DiemTransactionPublishingOption {
     use DiemFramework::DiemConfig::{Self, DiemConfig};
     use DiemFramework::DiemTimestamp;
     use DiemFramework::Roles;
-    use DiemFramework::Vote;
-    use Std::BCS;
     use Std::Errors;
     use Std::Signer;
     use Std::Vector;
@@ -29,12 +27,6 @@ module DiemFramework::DiemTransactionPublishingOption {
         script_allow_list: vector<vector<u8>>,
         /// Anyone can publish new module if this flag is set to true.
         module_publishing_allowed: bool,
-    }
-
-    struct ModulePublishingPreApproval has key {
-        // The approved sha3 for the modules being published
-        module_sha3_list: vector<vector<u8>>,
-        require_pre_approval: bool,
     }
 
     /// If published, halts transactions from all accounts except DiemRoot
@@ -67,13 +59,6 @@ module DiemFramework::DiemTransactionPublishingOption {
             }};
     }
 
-    /// Check if it is on the open publishing mode
-    public fun is_open_publishing(): bool {
-        let publish_option = DiemConfig::get<DiemTransactionPublishingOption>();
-        // allowlist empty = open publishing, anyone can send txes
-        Vector::is_empty(&publish_option.script_allow_list)
-    }
-
     /// Check if sender can execute script with `hash`
     public fun is_script_allowed(account: &signer, hash: &vector<u8>): bool {
         // DiemRoot can send any script
@@ -98,109 +83,6 @@ module DiemFramework::DiemTransactionPublishingOption {
     }
     spec schema AbortsIfNoTransactionPublishingOption {
         include DiemTimestamp::is_genesis() ==> DiemConfig::AbortsIfNotPublished<DiemTransactionPublishingOption>{};
-    }
-
-    struct ModulePublishProposal has store, copy, drop {
-        module_sha3: vector<u8>,
-    }
-
-    public(script) fun propose_pre_approve_module_publish(
-        account: signer,
-        module_sha3: vector<u8>,
-    ) {
-        let proposal = ModulePublishProposal {
-            module_sha3: module_sha3,
-        };
-        let addr = Signer::address_of(&account);
-        let approvers = Vector::empty();
-        Vector::push_back(&mut approvers, Vote::new_weighted_voter(1, BCS::to_bytes(&addr)));
-        Vote::create_ballot(
-            &account, // ballot_account
-            *(&proposal), // proposal
-            b"module_publish_preapproval", // proposal_type
-            1, // num_votes_required
-            approvers, // allowed_voters
-            2634834564, // expiration_timestamp_secs
-        );
-    }
-
-    public(script) fun vote_pre_approve_module_publish(
-        account: signer,
-        module_sha3: vector<u8>,
-        ballot_counter: u64,
-    ) acquires ModulePublishingPreApproval {
-        let proposal = ModulePublishProposal {
-            module_sha3: *(&module_sha3),
-        };
-        let addr = Signer::address_of(&account);
-        let ballot_id = Vote::new_ballot_id(
-            ballot_counter,
-            addr,
-        );
-        let success = Vote::vote(
-            &account,
-            ballot_id,
-            b"module_publish_preapproval",
-            proposal,
-        );
-        if (success) {
-            pre_approve_module_publish(account, module_sha3);
-        };
-    }
-
-    public(script) fun pre_approve_module_publish(
-        account: signer,
-        module_sha3: vector<u8>,
-    ) acquires ModulePublishingPreApproval {
-        let account_address = Signer::address_of(&account);
-        let mod_pub = borrow_global_mut<ModulePublishingPreApproval>(account_address);
-        Vector::push_back(&mut mod_pub.module_sha3_list, module_sha3);
-    }
-
-    public(script) fun set_module_publish_pre_approval(
-        account: signer,
-        enable: bool,
-    ) acquires ModulePublishingPreApproval {
-        let account_address = Signer::address_of(&account);
-        if (!exists<ModulePublishingPreApproval>(account_address)) {
-            move_to(&account, ModulePublishingPreApproval {
-                module_sha3_list: Vector::empty(),
-                require_pre_approval: enable,
-            });
-        } else {
-            let mod_pub = borrow_global_mut<ModulePublishingPreApproval>(account_address);
-            mod_pub.require_pre_approval = enable;
-        };
-    }
-
-    public fun is_module_pre_approved(
-        account_address: address,
-        module_sha3: vector<u8>
-    ): bool acquires ModulePublishingPreApproval {
-        if (exists<ModulePublishingPreApproval>(account_address)) {
-            let mod_pub = borrow_global<ModulePublishingPreApproval>(account_address);
-            if (mod_pub.require_pre_approval) {
-                let i = 0;
-                let len = Vector::length(&mod_pub.module_sha3_list);
-                while (i < len) {
-                    if (Vector::borrow(&mod_pub.module_sha3_list, i) == &module_sha3) {
-                        return true
-                    };
-                    i = i + 1;
-                };
-                return false
-            }
-        };
-        true
-    }
-
-    public fun is_module_allowed_v2(
-        account: &signer,
-        module_sha3: vector<u8>
-    ): bool acquires ModulePublishingPreApproval {
-        let account_address = Signer::address_of(account);
-        let module_pre_approved = is_module_pre_approved(account_address, module_sha3);
-        is_module_allowed(account) && module_pre_approved
     }
 
     /// Check if a sender can publish a module

@@ -17,8 +17,6 @@ module MultiToken {
         /// Pointer to where the content and metadata is stored.
         content_uri: vector<u8>,
         supply: u64,
-        /// Parent NFT id
-        parent_id: Option<GUID::ID>
     }
 
     /// A hot potato wrapper for the token's metadata. Since this wrapper has no `key` or `store`
@@ -29,7 +27,6 @@ module MultiToken {
         origin: address,
         index: u64,
         metadata: TokenType,
-        parent_id: Option<GUID::ID>,
     }
 
     /// Struct representing a semi-fungible or non-fungible token (depending on the supply).
@@ -67,8 +64,6 @@ module MultiToken {
     const ETOKEN_EXTRACTED: u64 = 4;
     const EINDEX_EXCEEDS_LENGTH: u64 = 5;
     const ETOKEN_PRESENT: u64 = 6;
-    const EPARENT_NOT_SAME_ACCOUNT: u64 = 7;
-    const ETOKEN_DATA_COLLECTION_ALREADY_PUBLISHED: u64 = 8;
 
     /// Returns the id of given token
     public fun id<TokenType: store>(token: &Token<TokenType>): GUID::ID {
@@ -82,11 +77,6 @@ module MultiToken {
 
     public fun metadata<TokenType: store>(wrapper: &TokenDataWrapper<TokenType>): &TokenType {
         &wrapper.metadata
-    }
-
-    /// Returns ID of collection associated with token
-    public fun parent<TokenType: store>(wrapper: &TokenDataWrapper<TokenType>): &Option<GUID::ID> {
-        &wrapper.parent_id
     }
 
     /// Returns the supply of tokens with `id` on the chain.
@@ -107,15 +97,13 @@ module MultiToken {
         assert!(Option::is_some(&index_opt), Errors::invalid_argument(EWRONG_TOKEN_ID));
         let index = Option::extract(&mut index_opt);
         let item_opt = &mut Vector::borrow_mut(tokens, index).metadata;
-        assert(Option::is_some(item_opt), Errors::invalid_state(ETOKEN_EXTRACTED));
-        let metadata = Option::extract(item_opt);
-        let parent_opt = &mut Vector::borrow_mut(tokens, index).parent_id;
-        TokenDataWrapper { origin: owner_addr, index, metadata, parent_id: *parent_opt }
+        assert!(Option::is_some(item_opt), Errors::invalid_state(ETOKEN_EXTRACTED));
+        TokenDataWrapper { origin: owner_addr, index, metadata: Option::extract(item_opt) }
     }
 
     /// Restore the token in the wrapper back into global storage under original address.
     public fun restore_token<TokenType: store>(wrapper: TokenDataWrapper<TokenType>) acquires TokenDataCollection {
-        let TokenDataWrapper { origin, index, metadata, parent_id: _ } = wrapper;
+        let TokenDataWrapper { origin, index, metadata } = wrapper;
         let tokens = &mut borrow_global_mut<TokenDataCollection<TokenType>>(origin).tokens;
         assert!(Vector::length(tokens) > index, EINDEX_EXCEEDS_LENGTH);
         let item_opt = &mut Vector::borrow_mut(tokens, index).metadata;
@@ -166,16 +154,9 @@ module MultiToken {
 
     /// Create a` TokenData<TokenType>` that wraps `metadata` and with balance of `amount`
     public fun create<TokenType: store>(
-        account: &signer, metadata: TokenType, content_uri: vector<u8>, amount: u64, parent_id: Option<GUID::ID>
+        account: &signer, metadata: TokenType, content_uri: vector<u8>, amount: u64
     ): Token<TokenType> acquires Admin, TokenDataCollection {
         let guid = GUID::create(account);
-
-        // If there is a parent, ensure it has the same creator
-        // TODO: Do we just say the owner has the ability instead?
-        if (Option::is_some(&parent_id)) {
-            let parent_id = Option::borrow(&mut parent_id);
-            assert(GUID::creator_address(&guid) == GUID::id_creator_address(parent_id), EPARENT_NOT_SAME_ACCOUNT);
-        };
         Event::emit_event(
             &mut borrow_global_mut<Admin>(ADMIN).mint_events,
             MintEvent {
@@ -192,17 +173,9 @@ module MultiToken {
         let token_data_collection = &mut borrow_global_mut<TokenDataCollection<TokenType>>(Signer::address_of(account)).tokens;
         Vector::push_back(
             token_data_collection,
-            TokenData { metadata: Option::some(metadata), token_id: guid, content_uri, supply: amount, parent_id }
+            TokenData { metadata: Option::some(metadata), token_id: guid, content_uri, supply: amount }
         );
         Token { id, balance: amount }
-    }
-
-    public fun publish_token_data_collection<TokenType: store>(account: &signer) {
-        assert(
-            !exists<TokenDataCollection<TokenType>>(Signer::address_of(account)),
-            ETOKEN_DATA_COLLECTION_ALREADY_PUBLISHED
-        );
-        move_to(account, TokenDataCollection<TokenType> { tokens: Vector::empty() });
     }
 }
 }

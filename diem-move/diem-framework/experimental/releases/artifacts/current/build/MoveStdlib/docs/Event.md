@@ -20,8 +20,7 @@ events emitted to a handle and emit events to the event store.
 -  [Module Specification](#@Module_Specification_0)
 
 
-<pre><code><b>use</b> <a href="BCS.md#0x1_BCS">0x1::BCS</a>;
-<b>use</b> <a href="GUID.md#0x1_GUID">0x1::GUID</a>;
+<pre><code><b>use</b> <a href="GUID.md#0x1_GUID">0x1::GUID</a>;
 </code></pre>
 
 
@@ -177,7 +176,7 @@ Emit an event with payload <code>msg</code> by using <code>handle_ref</code>'s k
 
 
 <pre><code><b>public</b> <b>fun</b> <a href="Event.md#0x1_Event_emit_event">emit_event</a>&lt;T: drop + store&gt;(handle_ref: &<b>mut</b> <a href="Event.md#0x1_Event_EventHandle">EventHandle</a>&lt;T&gt;, msg: T) {
-    <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T&gt;(<a href="BCS.md#0x1_BCS_to_bytes">BCS::to_bytes</a>(&handle_ref.guid.guid), handle_ref.counter, msg);
+    <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T&gt;(<a href="GUID.md#0x1_GUID_to_bytes">GUID::to_bytes</a>(&handle_ref.guid.guid), handle_ref.counter, msg);
     handle_ref.counter = handle_ref.counter + 1;
 }
 </code></pre>
@@ -215,10 +214,11 @@ Return the GUIID associated with this EventHandle
 
 ## Function `write_to_event_store`
 
-Log <code>msg</code> as the <code>count</code>th event associated with the event stream identified by <code>guid</code>
+Native procedure that writes to the actual event stream in Event store
+This will replace the "native" portion of EmitEvent bytecode
 
 
-<pre><code><b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop, store&gt;(guid: vector&lt;u8&gt;, count: u64, msg: T)
+<pre><code><b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop, store&gt;(guid_bytes: vector&lt;u8&gt;, count: u64, msg: T)
 </code></pre>
 
 
@@ -227,7 +227,7 @@ Log <code>msg</code> as the <code>count</code>th event associated with the event
 <summary>Implementation</summary>
 
 
-<pre><code><b>native</b> <b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop + store&gt;(guid: vector&lt;u8&gt;, count: u64, msg: T);
+<pre><code><b>native</b> <b>fun</b> <a href="Event.md#0x1_Event_write_to_event_store">write_to_event_store</a>&lt;T: drop + store&gt;(guid_bytes: vector&lt;u8&gt;, count: u64, msg: T);
 </code></pre>
 
 
